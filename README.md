@@ -49,7 +49,7 @@ Follow these steps to get the application running directly from the source code 
 
 ## Creating an OS specific app
 
-You can also create an excecutable using pyinstaller.
+You can also create an excecutable using pyinstaller. NOTE: currently it does NOT store setlists.json and songs.json in the app itself. TODO!
 
 1. **Install pyinstall**
     ```bash
