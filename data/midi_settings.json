@@ -1,0 +1,11 @@
+{
+  "enabled": true,
+  "shortcuts": {
+    "play_pause": "Enter",
+    "stop": "Escape",
+    "next": "ArrowDown",
+    "previous": "ArrowUp"
+  },
+  "midi_mappings": {},
+  "midi_input_device": null
+}

@@ -1,0 +1,6 @@
+{
+  "audio_outputs": [],
+  "volume": 1.0,
+  "sample_rate": 48000,
+  "audio_directory_path": "data/audio"
+}
