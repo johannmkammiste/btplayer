@@ -2,7 +2,7 @@
 # Autostart script for kiosk mode, based on @AYapejian: https://github.com/MichaIng/DietPi/issues/1737#issue-318697621
 # 1. Define your project directory
 #    IMPORTANT: Change this to the absolute path of your project directory
-PROJECT_DIR="/root/backingtrackplayer"
+PROJECT_DIR="/root/btplayer"
 
 # 2. Navigate to your project directory
 cd "$PROJECT_DIR" || echo "Failed to cd to $PROJECT_DIR"
@@ -30,7 +30,7 @@ RES_Y=$(sed -n '/^[[:blank:]]*SOFTWARE_CHROMIUM_RES_Y=/{s/^[^=]*=//p;q}' /boot/d
 # - Review and add custom flags in: /etc/chromium.d
 CHROMIUM_OPTS="--kiosk --window-size=${RES_X:-1280},${RES_Y:-720} --window-position=0,0"
 
-# If you want tablet mode, uncomment the next line.
+# If you do not want tablet mode, comment the next line.
 CHROMIUM_OPTS="$CHROMIUM_OPTS --force-tablet-mode --tablet-ui --noerrdialogs --no-memcheck"
 
 # Home page
