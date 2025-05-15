@@ -91,5 +91,10 @@ This project was mostly designed with a SBC in mind. So here are the instruction
     ```
    Reboot Pi and all should be working well :)
 
+TODO:
+
+Add saving functionality to pyinstaller exe
+
+Add MIDI, GPIO support
 
 
