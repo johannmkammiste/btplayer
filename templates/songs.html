@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block sidebar %}
+<div class="songs-sidebar">
+    <button id="add-song-btn" class="add-song-button">
+        ＋ Add New Song
+    </button>
+    <button id="manage-media-btn" class="manage-media-button">
+        <span role="img" aria-label="Music Notes">🎵</span> Manage Audio Files
+    </button>
+    <div class="songs-list">
+        {% for song in songs %}
+        <div class="song-item" data-song-id="{{ song.id }}">
+            <span class="song-name">{{ song.name }}</span>
+            <span class="song-tempo">{{ song.tempo }} BPM</span>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="song-editor" id="song-editor">
+    <div class="empty-state" id="empty-state">
+        <p>Select a song from the list or create a new one</p>
+    </div>
+
+    <div class="song-form" id="song-form" style="display: none;">
+        <div class="song-header">
+            <h2 id="song-title">New Song</h2>
+            <div class="song-meta">
+                <div class="meta-row">
+                    <label>Song Name:</label>
+                    <input type="text" id="song-name" class="song-name-input">
+                </div>
+                <div class="meta-row">
+                    <label>Tempo (BPM):</label>
+                    <input type="number" id="song-tempo" class="tempo-input" min="40" max="300">
+                </div>
+            </div>
+        </div>
+
+        <div class="song-actions">
+            <button id="save-song" class="action-button save">Save Song</button>
+            <button id="delete-song" class="action-button delete">Delete Song</button>
+        </div>
+
+        <div class="tracks-section">
+            <h3>Audio Tracks</h3>
+            <div class="tracks-list" id="tracks-list">
+                </div>
+            <button id="add-track-to-song-btn" class="action-button add-track">＋ Add Track to Song</button>
+        </div>
+    </div>
+</div>
+
+<div id="select-audio-file-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>Select Audio File for Track</h4>
+            <button class="close-modal-btn" data-modal-id="select-audio-file-modal">&times;</button>
+        </div>
+        <div class="modal-body" id="audio-file-selector-list">
+{#            Dynamically updated#}
+        </div>
+        <div class="modal-footer">
+             <button class="modal-button cancel" data-modal-id="select-audio-file-modal">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+<div id="media-library-modal" class="modal" style="display: none;">
+    <div class="modal-content media-library-content">
+        <div class="modal-header">
+            <h2>Audio File Library</h2>
+            <button class="close-modal-btn" data-modal-id="media-library-modal" aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="global-upload-area">
+                <input type="file" id="global-file-upload" multiple accept=".wav,.mp3,.ogg,.aiff" style="display: none;">
+                <label for="global-file-upload" class="upload-button">
+                    Upload New Audio Files
+                </label>
+                <span class="upload-hint">Drag & drop files here or click to browse</span>
+                <div id="global-upload-status"></div>
+            </div>
+            <hr style="border-color: rgba(255,255,255,0.1); margin: 15px 0;">
+            <h3>Available Audio Files</h3>
+            <div id="available-audio-files-list" class="available-files-list">
+                <p>Loading audio files...</p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-button cancel" data-modal-id="media-library-modal">Close</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

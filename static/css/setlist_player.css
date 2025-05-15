@@ -1,0 +1,205 @@
+.player-container {
+    padding: 30px;
+    height: 100%;
+    overflow-y: auto;
+    color: #ecf0f1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center
+}
+
+.setlist-sidebar {
+    padding: 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    color: #ecf0f1;
+}
+
+.setlist-sidebar h2 {
+    color: #f1c40f;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.songs-list {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 15px;
+}
+
+.song-item {
+    cursor: pointer;
+    padding: 12px 15px;
+    margin: 5px 0;
+    border-left: 3px solid transparent;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    transition: all 0.2s ease;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.song-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.song-item.active {
+    background-color: rgba(52, 152, 219, 0.2);
+    border-left: 3px solid #3498db;
+}
+
+.song-name {
+    font-weight: 500;
+    color: #ecf0f1;
+}
+
+.song-details {
+    color: #bdc3c7;
+    font-size: 0.85rem;
+}
+
+.now-playing {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 25px;
+    border-radius: 6px;
+    margin-bottom: 40px;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+}
+
+.now-playing h2 {
+    color: #f1c40f;
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+}
+
+.song-info {
+    display: flex;
+    gap: 20px;
+    color: #bdc3c7;
+    font-size: 1.1rem;
+    justify-content: center;
+}
+
+.player-controls {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 700px;
+}
+
+.control-btn {
+    padding: 18px 30px;
+    font-size: 1.5rem;
+    min-width: 100px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.control-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+.control-btn:active {
+    transform: translateY(0px) scale(0.98);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+
+#play-btn { background-color: #2ecc71; }
+#play-btn:hover { background-color: #27ae60; box-shadow: 0 4px 8px rgba(46, 204, 113, 0.4); }
+
+#stop-btn { background-color: #e74c3c; }
+#stop-btn:hover { background-color: #c0392b; box-shadow: 0 4px 8px rgba(231, 76, 60, 0.4); }
+
+#previous-btn,
+#next-btn { background-color: #3498db; }
+#previous-btn:hover,
+#next-btn:hover { background-color: #2980b9; box-shadow: 0 4px 8px rgba(52, 152, 219, 0.4); }
+
+.status-indicators {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .player-container {
+        padding: 20px;
+        justify-content: flex-start;
+    }
+    .now-playing {
+        margin-bottom: 30px;
+        padding: 20px;
+    }
+    .now-playing h2 {
+        font-size: 1.5rem;
+    }
+    .song-info {
+        font-size: 1rem;
+        gap: 15px;
+    }
+    .player-controls {
+        flex-wrap: wrap;
+        gap: 15px;
+        max-width: 100%;
+    }
+    .control-btn {
+        padding: 15px 20px;
+        font-size: 1.2rem;
+        min-width: calc(50% - 10px);
+        height: 60px;
+        flex-grow: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .player-container {
+        padding: 15px;
+    }
+    .now-playing {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    .now-playing h2 {
+        font-size: 1.3rem;
+    }
+    .song-info {
+        font-size: 0.9rem;
+        flex-direction: column;
+        gap: 5px;
+    }
+    .player-controls {
+        gap: 10px;
+    }
+    .control-btn {
+        padding: 12px 15px;
+        font-size: 1.1rem;
+        min-width: calc(50% - 5px);
+        height: 55px;
+    }
+    #play-btn, #stop-btn {
+        min-width: calc(60% - 5px);
+    }
+    #previous-btn, #next-btn {
+        min-width: calc(40% - 5px);
+    }
+}

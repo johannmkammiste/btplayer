@@ -1,0 +1,6 @@
+git+https://github.com/johannmkammiste/modpybassmacos.git@master#egg=modpybass
+flask
+waitress
+Flask-Caching
+pywebview
+Werkzeug
