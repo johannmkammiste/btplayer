@@ -81,7 +81,7 @@ This project was mostly designed with a SBC in mind. So here are the instruction
     ```bash
     wget https://github.com/johannmkammiste/btplayer/archive/refs/heads/main.zip
    unzip main.zip
-   cd backingtrackplayer
+   cd btplayer
    apt install python3-venv
    python3 -m venv venv
    source venv/bin/activate
