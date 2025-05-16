@@ -2,7 +2,7 @@
 # Autostart script for kiosk mode, based on @AYapejian: https://github.com/MichaIng/DietPi/issues/1737#issue-318697621
 # 1. Define your project directory
 #    IMPORTANT: Change this to the absolute path of your project directory
-PROJECT_DIR="/root/btplayer"
+PROJECT_DIR="/root/btplayer-main"
 
 # 2. Navigate to your project directory
 cd "$PROJECT_DIR" || echo "Failed to cd to $PROJECT_DIR"
