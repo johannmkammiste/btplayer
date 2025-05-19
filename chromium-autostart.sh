@@ -28,7 +28,7 @@ RES_Y=$(sed -n '/^[[:blank:]]*SOFTWARE_CHROMIUM_RES_Y=/{s/^[^=]*=//p;q}' /boot/d
 
 # Command line switches: https://peter.sh/experiments/chromium-command-line-switches/
 # - Review and add custom flags in: /etc/chromium.d
-CHROMIUM_OPTS="--kiosk --window-size=${RES_X:-1280},${RES_Y:-720} --window-position=0,0"
+CHROMIUM_OPTS="--kiosk --window-size=${RES_X:-1920},${RES_Y:-1080} --window-position=0,0"
 
 # If you do not want tablet mode, comment the next line.
 CHROMIUM_OPTS="$CHROMIUM_OPTS --force-tablet-mode --tablet-ui --noerrdialogs --no-memcheck"
@@ -43,5 +43,7 @@ FP_CHROMIUM=$(command -v chromium-browser)
 # Use "startx" as non-root user to get required permissions via systemd-logind
 STARTX='xinit'
 [ "$USER" = 'root' ] || STARTX='startx'
+
+sleep 3
 
 exec "$STARTX" "$FP_CHROMIUM" $CHROMIUM_OPTS "${URL:-http://127.0.0.1:5001/}"
