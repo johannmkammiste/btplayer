@@ -216,7 +216,7 @@ atexit.register(audio_player.shutdown)
 # UI
 @app.route('/')
 def index():
-    is_kiosk = os.environ.get('KIOSK_MODE', 'False') == 'True'
+    is_kiosk = app.config.get('KIOSK_MODE', 'False')
     return render_template('index.html', KIOSK_MODE=is_kiosk)
 
 @app.route('/setlists')
@@ -460,10 +460,9 @@ def factory_reset():
 
 @app.route('/api/system/reboot', methods=['POST'])
 def system_reboot():
-    if not (app.KIOSK_MODE):
+    if not (app.config.get("KIOSK_MODE", False)):
         logging.warning("Reboot attempt denied: Not in Kiosk mode.")
         return jsonify(success=False, error="Reboot function is only available in Kiosk mode."), 403  # Forbidden
-
     try:
         logging.info("Received request to reboot system (Kiosk Mode).")
         subprocess.run(['sudo', 'reboot'], check=True)
