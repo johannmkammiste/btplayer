@@ -460,7 +460,7 @@ def factory_reset():
         traceback.print_exc()
         return jsonify(success=False, error=f"Critical factory reset error: {str(e_fr)}"), 500
 
-@app.route('/api/system/quit', methods=['POST'])
+@app.route('/api/application/quit', methods=['POST'])
 def application_quit():
     logging.info("Received API request to quit application backend.")
 
