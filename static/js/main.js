@@ -101,12 +101,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 exitAppBtn.textContent = 'Exiting...';
 
                 if (isKioskMode) {
-                    // --- KIOSK MODE EXIT LOGIC ---
-                    // This calls the API endpoint that shuts down the Python backend.
-                    // The start_chromium_scaled.sh script should then detect backend unavailability
-                    // and kill Chromium, leading to X session termination.
                     try {
-                        const response = await fetch('/api/application/quit', { method: 'POST' });
+                        const response = await fetch('/api/application/quit', {method: 'POST'});
                         const result = await response.json();
                         if (response.ok && result.success) {
                             window.showGlobalNotification(result.message || 'Backend shutdown initiated. Closing Kiosk...', 'info', 10000);
@@ -120,30 +116,21 @@ document.addEventListener('DOMContentLoaded', function () {
                         exitAppBtn.disabled = false;
                         exitAppBtn.textContent = 'EXIT KIOSK'; // Reset text
                     }
-                } else {
-                    // --- NON-KIOSK MODE (PYWEBVIEW) EXIT LOGIC ---
-                    if (window.pywebview && window.pywebview.api && typeof window.pywebview.api.quit === 'function') {
-                        try {
-                            window.showGlobalNotification('Exiting application...', 'info', 2000);
-                            window.pywebview.api.quit(); // Calls Python Api.quit() in run.py
-                        } catch (error) {
-                            console.error("Error calling pywebview.api.quit:", error);
-                            window.showGlobalNotification('Could not exit application cleanly. Please close the window manually.', 'error');
-                            exitAppBtn.disabled = false;
-                            exitAppBtn.textContent = 'EXIT APPLICATION'; // Reset text
-                        }
-                    } else {
-                        // Fallback if pywebview is not available (shouldn't happen if run.py is used for non-kiosk)
-                        window.showGlobalNotification('Standard exit mechanism (pywebview) not available. Please close the window manually.', 'warning');
-                        exitAppBtn.disabled = false;
-                        exitAppBtn.textContent = 'EXIT APPLICATION'; // Reset text
-                        // As a last resort, you could try window.close(), but it's often blocked.
-                        // window.close();
+                }
+                if (window.pywebview) {
+                    try {
+                        window.showGlobalNotification('Exiting application...', 'info', 2000);
+                        window.pywebview.api.quit();
+                    } catch (error) {
+                        console.error("Error calling pywebview.api.request_shutdown_app:", error);
+                        window.showGlobalNotification('Could not exit application cleanly. Please close the window manually.', 'error');
                     }
+                } else {
+                    window.close();
                 }
             } else {
-                 // User cancelled the confirmation
-                 window.showGlobalNotification('Exit cancelled.', 'info');
+                // User cancelled the confirmation
+                window.showGlobalNotification('Exit cancelled.', 'info');
             }
         });
     }

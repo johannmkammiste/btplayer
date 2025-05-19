@@ -24,4 +24,10 @@
         <p>For more information, visit the <a href="https://github.com/johannmkammiste/btplayer" target="_blank">GitHub repository</a>.</p>
         <p class="app-version">Version 0.2</p>
     </div>
+
+    <script>
+        window.APP_CONFIG = window.APP_CONFIG || {};
+        // KIOSK_MODE here is the variable passed from Flask to the template
+        window.APP_CONFIG.KIOSK_MODE = {{ KIOSK_MODE | tojson }};
+    </script>
 {% endblock %}

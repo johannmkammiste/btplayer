@@ -43,11 +43,6 @@
     </div>
 </div>
 {% block scripts %}
-    <script>
-        window.APP_CONFIG = window.APP_CONFIG || {};
-        // KIOSK_MODE here is the variable passed from Flask to the template
-        window.APP_CONFIG.KIOSK_MODE = {{ KIOSK_MODE | tojson }};
-    </script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     {% if request.path == '/songs' %}
         <script src="{{ url_for('static', filename='js/songs.js') }}"></script>
