@@ -19,7 +19,7 @@ Follow these steps to get the application running directly from the source code 
     Open your terminal or command prompt and run:
     ```bash
     git clone https://github.com/johannmkammiste/btplayer btplayer
-    cd backingtrackplayer
+    cd btplayer
     ```
 
 2.  **Create and Activate a Virtual Environment:**
