@@ -2,8 +2,11 @@ import atexit
 import json
 import logging
 import os
+import signal
 import subprocess
 import sys
+import threading
+import time
 import traceback
 from pathlib import Path
 
@@ -457,6 +460,23 @@ def factory_reset():
         traceback.print_exc()
         return jsonify(success=False, error=f"Critical factory reset error: {str(e_fr)}"), 500
 
+@app.route('/api/system/quit', methods=['POST'])
+def application_quit():
+    logging.info("Received API request to quit application backend.")
+
+    # This function will send SIGINT to the current process after a short delay.
+    # The delay allows the HTTP response to be sent to the client.
+    def delayed_shutdown():
+        time.sleep(0.5) # Allow response to be sent
+        logging.info("Sending SIGINT to self (PID: %d) to trigger shutdown.", os.getpid())
+        os.kill(os.getpid(), signal.SIGINT) # Trigger KeyboardInterrupt in kiosk.py
+
+    # Run in a separate thread so it doesn't block the HTTP response.
+    shutdown_thread = threading.Thread(target=delayed_shutdown)
+    shutdown_thread.daemon = True # Allows main program to exit even if this thread is running
+    shutdown_thread.start()
+
+    return jsonify(success=True, message="Application backend shutdown initiated.")
 
 @app.route('/api/system/reboot', methods=['POST'])
 def system_reboot():
@@ -481,20 +501,20 @@ def system_reboot():
 @app.route('/api/system/shutdown', methods=['POST'])
 def system_shutdown():
     if not (app.config.get("KIOSK_MODE", False)):
-        logging.warning("Reboot attempt denied: Not in Kiosk mode.")
-        return jsonify(success=False, error="Reboot function is only available in Kiosk mode."), 403  # Forbidden
+        logging.warning("Shutdown attempt denied: Not in Kiosk mode.")
+        return jsonify(success=False, error="Shutdown function is only available in Kiosk mode."), 403  # Forbidden
     try:
-        logging.info("Received request to reboot system (Kiosk Mode).")
+        logging.info("Received request to shutdown system (Kiosk Mode).")
         subprocess.run(['sudo', 'shutdown'], check=True)
-        return jsonify(success=True, message="Reboot command issued. The system should shutdwn shortly.")
+        return jsonify(success=True, message="Shuwdown command issued. The system should shutdwn shortly.")
     except subprocess.CalledProcessError as e:
-        logging.error(f"Reboot command failed: {e}")
-        return jsonify(success=False, error=f"Reboot command failed: {e.strerror}"), 500
+        logging.error(f"Shutdoown command failed: {e}")
+        return jsonify(success=False, error=f"Shutdown command failed: {e.strerror}"), 500
     except FileNotFoundError:
-        logging.error("Reboot command failed: 'sudo' or 'reboot' command not found.")
-        return jsonify(success=False, error="Reboot command not found on system."), 500
+        logging.error("Shutdown command failed: 'sudo' or 'shutdown' command not found.")
+        return jsonify(success=False, error="Shutdown command not found on system."), 500
     except Exception as e:
-        logging.error(f"An unexpected error occurred during reboot attempt: {e}")
+        logging.error(f"An unexpected error occurred during Shutdown attempt: {e}")
         traceback.print_exc()
         return jsonify(success=False, error=f"An unexpected error occurred: {str(e)}"), 500
 

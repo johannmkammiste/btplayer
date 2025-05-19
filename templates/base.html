@@ -12,37 +12,42 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/setlist_player.css') }}">
 </head>
 <body>
-    <div class="container">
-        <div class="sidebar">
-            <div class="sidebar-top-controls">
-                <a href="{{ url_for('index') }}" class="home-button" title="Home">⌂</a>
-                <button id="history-back-btn" class="nav-button" title="Go Back">◀</button>
-                <button id="history-forward-btn" class="nav-button" title="Go Forward">▶</button>
-            </div>
-            {% block sidebar %}{% endblock %}
+<div class="container">
+    <div class="sidebar">
+        <div class="sidebar-top-controls">
+            <a href="{{ url_for('index') }}" class="home-button" title="Home">⌂</a>
+            <button id="history-back-btn" class="nav-button" title="Go Back">◀</button>
+            <button id="history-forward-btn" class="nav-button" title="Go Forward">▶</button>
         </div>
-        <div class="main-content">
-            <div id="real-time-clock" class="clock-display">--:--:--</div>
-            {% block content %}{% endblock %}
-        </div>
+        {% block sidebar %}{% endblock %}
     </div>
-    <div id="notification-container"></div>
+    <div class="main-content">
+        <div id="real-time-clock" class="clock-display">--:--:--</div>
+        {% block content %}{% endblock %}
+    </div>
+</div>
+<div id="notification-container"></div>
 
-    <div id="custom-confirm-modal" class="modal" style="display: none;">
-        <div class="modal-content confirm-modal-content">
-            <div class="modal-header">
-                <h4 id="custom-confirm-title">Confirm Action</h4>
-                </div>
-            <div class="modal-body">
-                <p id="custom-confirm-message">Are you sure you want to proceed?</p>
-            </div>
-            <div class="modal-footer confirm-modal-footer">
-                <button id="custom-confirm-btn-yes" class="modal-button confirm">Yes</button>
-                <button id="custom-confirm-btn-no" class="modal-button cancel">No</button>
-            </div>
+<div id="custom-confirm-modal" class="modal" style="display: none;">
+    <div class="modal-content confirm-modal-content">
+        <div class="modal-header">
+            <h4 id="custom-confirm-title">Confirm Action</h4>
+        </div>
+        <div class="modal-body">
+            <p id="custom-confirm-message">Are you sure you want to proceed?</p>
+        </div>
+        <div class="modal-footer confirm-modal-footer">
+            <button id="custom-confirm-btn-yes" class="modal-button confirm">Yes</button>
+            <button id="custom-confirm-btn-no" class="modal-button cancel">No</button>
         </div>
     </div>
-    {% block scripts %}
+</div>
+{% block scripts %}
+    <script>
+        window.APP_CONFIG = window.APP_CONFIG || {};
+        // KIOSK_MODE here is the variable passed from Flask to the template
+        window.APP_CONFIG.KIOSK_MODE = {{ KIOSK_MODE | tojson }};
+    </script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     {% if request.path == '/songs' %}
         <script src="{{ url_for('static', filename='js/songs.js') }}"></script>
@@ -54,6 +59,6 @@
         <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
         <script src="{{ url_for('static', filename='js/input-control.js') }}"></script>
     {% endif %}
-    {% endblock %}
+{% endblock %}
 </body>
 </html>
