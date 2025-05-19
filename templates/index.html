@@ -6,15 +6,12 @@
             <li><a href="{{ url_for('setlists_page') }}" class="nav-link">SETLISTS</a></li>
             <li><a href="{{ url_for('songs_page') }}" class="nav-link">SONGS</a></li>
             <li><a href="{{ url_for('settings_page') }}" class="nav-link">SETTINGS</a></li>
-
-            {% if KIOSK_MODE %}
-            <li>
-                <button id="reboot-system-btn" class="nav-link exit-button">REBOOT SYSTEM</button>
-            </li>
-            {% else %}
             <li>
                 <button id="exit-app-btn" class="nav-link exit-button">EXIT APPLICATION</button>
             </li>
+            {% if KIOSK_MODE %}
+            <li><button id="reboot-system-btn" class="nav-link exit-button">REBOOT SYSTEM</button></li>
+            <li><button id="shutdown-system-btn" class="nav-link exit-button">SHUTDOWN SYSTEM</button></li>
             {% endif %}
         </ul>
     </nav>

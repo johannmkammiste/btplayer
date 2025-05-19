@@ -143,6 +143,41 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    const shutdownSystemBtn = document.getElementById('shutdown-system-btn');
+    if (shutdownSystemBtn) {
+        shutdownSystemBtn.addEventListener('click', async () => {
+            const confirmed = await window.showCustomConfirm(
+                'Are you sure you want to shutdown the system? All unsaved work will be lost.',
+                'Confirm System Shutdown'
+            );
+            if (confirmed) {
+                shutdownSystemBtn.disabled = true;
+                shutdownSystemBtn.textContent = 'Shutting down...';
+                try {
+                    const response = await fetch('/api/system/shutdown', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    const result = await response.json();
+                    if (response.ok && result.success) {
+                        window.showGlobalNotification(result.message || 'System is shutting down...', 'success', 10000);
+                    } else {
+                        throw new Error(result.error || 'Failed to initiate shutdown.');
+                    }
+                } catch (error) {
+                    console.error("Error calling system shutdown API:", error);
+                    window.showGlobalNotification('Shutdown Error: ' + error.message, 'error');
+                    shutdownSystemBtn().disabled = false; // Re-enable button on error
+                    shutdownSystemBtn.textContent = 'SHUTDOWN SYSTEM'; //
+                }
+            } else {
+                window.showGlobalNotification('System shutdown cancelled.', 'info');
+            }
+        });
+    }
+
 });
 
 

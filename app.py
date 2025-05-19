@@ -478,6 +478,26 @@ def system_reboot():
         traceback.print_exc()
         return jsonify(success=False, error=f"An unexpected error occurred: {str(e)}"), 500
 
+@app.route('/api/system/shutdown', methods=['POST'])
+def system_shutdown():
+    if not (app.config.get("KIOSK_MODE", False)):
+        logging.warning("Reboot attempt denied: Not in Kiosk mode.")
+        return jsonify(success=False, error="Reboot function is only available in Kiosk mode."), 403  # Forbidden
+    try:
+        logging.info("Received request to reboot system (Kiosk Mode).")
+        subprocess.run(['sudo', 'shutdown'], check=True)
+        return jsonify(success=True, message="Reboot command issued. The system should shutdwn shortly.")
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Reboot command failed: {e}")
+        return jsonify(success=False, error=f"Reboot command failed: {e.strerror}"), 500
+    except FileNotFoundError:
+        logging.error("Reboot command failed: 'sudo' or 'reboot' command not found.")
+        return jsonify(success=False, error="Reboot command not found on system."), 500
+    except Exception as e:
+        logging.error(f"An unexpected error occurred during reboot attempt: {e}")
+        traceback.print_exc()
+        return jsonify(success=False, error=f"An unexpected error occurred: {str(e)}"), 500
+
 @app.route('/api/export/<export_type>', methods=['GET'])
 def export_data(export_type):
     filename_map = {'songs': SONGS_FILE, 'setlists': SETLISTS_FILE}
