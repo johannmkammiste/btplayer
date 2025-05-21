@@ -1,4 +1,4 @@
-git+https://github.com/johannmkammiste/modpybassmacos.git@master#egg=modpybass
+modpybass2
 flask
 waitress
 Flask-Caching
