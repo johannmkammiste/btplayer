@@ -526,29 +526,31 @@ class AudioPlayer:
 
                 # Stereo source to stereo output
                 if source_channels >= 2:
-                    matrix[0 * mixer_channels + physical_idx] = 1.0  # Left to Left
-                    matrix[1 * mixer_channels + second_physical_idx] = 1.0  # Right to Right
+                    # Left channel to first output
+                    matrix[0 * mixer_channels + physical_idx] = 1.0
+                    # Right channel to second output
+                    matrix[1 * mixer_channels + second_physical_idx] = 1.0
                     logging.debug(f"Stereo source to stereo output: L->{physical_idx}, R->{second_physical_idx}")
                 # Mono source to stereo output
                 elif source_channels == 1:
-                    matrix[0 * mixer_channels + physical_idx] = 1.0  # Mono to Left
-                    matrix[0 * mixer_channels + second_physical_idx] = 1.0  # Mono to Right
+                    # Mono to both outputs
+                    matrix[0 * mixer_channels + physical_idx] = 1.0
+                    matrix[0 * mixer_channels + second_physical_idx] = 1.0
                     logging.debug(f"Mono source to stereo output: Mono->{physical_idx}/{second_physical_idx}")
             else:
-                # Stereo requested but second channel invalid, fallback to mono
+                # Stereo requested but second channel invalid, fallback to mono on single channel
                 if source_channels >= 1 and physical_idx < mixer_channels:
                     matrix[0 * mixer_channels + physical_idx] = 1.0
                     logging.warning(f"Stereo requested but second channel invalid. Using mono output->{physical_idx}")
-
         else:
-            # Mono output (from any source)
+            # Mono output (from any source) - always route to single specified channel
             if physical_idx < mixer_channels:
-                # Route the first source channel to the specific physical output channel
+                # Route first channel (or only channel for mono source) to output
                 matrix[0 * mixer_channels + physical_idx] = 1.0
-                logging.debug(
-                    f"Mono output: First source channel (idx 0) routed to physical output channel index {physical_idx}")
+                logging.debug(f"Mono output: First source channel -> {physical_idx}")
             else:
                 logging.warning(f"Physical index {physical_idx} invalid for mixer with {mixer_channels} channels")
+
         return matrix
 
     def _playback_monitor(self):
