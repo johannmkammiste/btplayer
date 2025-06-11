@@ -425,10 +425,20 @@ class AudioPlayer:
             logging.error(f"Failed to get channel info for '{file_path_rel}'. Error: {BASS_ErrorGetCode()}. Skipping.")
             return False
 
-        # Get stream channels (may be different than file due to MONO flag)
+        # Get stream channels and add a robust validation check for all cases
         stream_channels = source_info.chans
+        if not (1 <= stream_channels <= 8):  # Allow up to 8 channels, but catch garbage values
+            logging.warning(
+                f"Unusual stream channel count {stream_channels} detected for '{file_path_rel}'. Clamping value.")
+            # Clamp to 1 for mono streams, otherwise default to 2
+            if source_flags & BASS_SAMPLE_MONO:
+                stream_channels = 1
+            else:
+                stream_channels = 2
+
+        # The original check can be kept as a fallback
         if source_flags & BASS_SAMPLE_MONO and stream_channels != 1:
-            logging.warning(f"MONO flag set but stream has {stream_channels} channels. Forcing to 1.")
+            logging.warning(f"Stream was supposed to be mono, but reports {stream_channels} channels. Forcing to 1.")
             stream_channels = 1
 
         # Get mixer channel count
@@ -529,15 +539,16 @@ class AudioPlayer:
                 if source_channels >= 1 and physical_idx < mixer_channels:
                     matrix[0 * mixer_channels + physical_idx] = 1.0
                     logging.warning(f"Stereo requested but second channel invalid. Using mono output->{physical_idx}")
+
         else:
             # Mono output (from any source)
             if physical_idx < mixer_channels:
-                # Route first channel (or only channel for mono source) to output
+                # Route the first source channel to the specific physical output channel
                 matrix[0 * mixer_channels + physical_idx] = 1.0
-                logging.debug(f"Mono output: First source channel -> {physical_idx}")
+                logging.debug(
+                    f"Mono output: First source channel (idx 0) routed to physical output channel index {physical_idx}")
             else:
                 logging.warning(f"Physical index {physical_idx} invalid for mixer with {mixer_channels} channels")
-
         return matrix
 
     def _playback_monitor(self):
